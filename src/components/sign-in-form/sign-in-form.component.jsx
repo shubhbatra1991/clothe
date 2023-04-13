@@ -3,6 +3,8 @@ import { useState } from 'react';
 import FormInput from '../form-input/form-input.component';
 import Button from '../button/button.component';
 
+// import { UserContext } from '../../contexts/user.context'; 
+
 import {
   signInWithGooglePopup,
   createUserDocumentFromAuth,
@@ -25,8 +27,7 @@ const SignInForm = () => {
   };
 
   const signInWithGoogle = async () => {
-    const { user } = await signInWithGooglePopup();
-    await createUserDocumentFromAuth(user);
+    await signInWithGooglePopup();
   };
 
 
@@ -34,8 +35,7 @@ const SignInForm = () => {
     event.preventDefault();
 
     try {
-      const response = await signInAuthUserWithEmailAndPassword(email, password);
-      console.log(response);
+      await signInAuthUserWithEmailAndPassword(email, password);
       resetFormFields();
     } catch (error) {
       switch(error.code){
@@ -48,7 +48,7 @@ const SignInForm = () => {
           break
 
         default:
-          console.log(error);
+          alert("I am sorry, something went wrong. Please try again later");
       }      
     }
   };
