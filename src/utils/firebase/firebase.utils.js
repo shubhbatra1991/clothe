@@ -17,7 +17,9 @@ import {
   getDoc, 
   setDoc, 
   collection, 
-  writeBatch 
+  writeBatch,
+  query,
+  getDocs, 
 } from 'firebase/firestore';
 
 
@@ -50,7 +52,7 @@ const firebaseConfig = {
   
   export const db = getFirestore();
 
-  //Adding values to db
+  //Adding values to db on Firestock
 
   export const addCollectionAndDocuments = async (collectionKey, objectsToAdd, field = 'title' ) => {
     const collectionRef = collection(db, collectionKey);
@@ -66,6 +68,24 @@ const firebaseConfig = {
     console.log('done');
 
   };
+
+  // Extracting values from database server and creating a map.
+  export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+
+    const querySnapshot = await getDocs(q);
+    const categoryMap = querySnapshot.docs.reduce((acc, docSnapshot)=>{
+      const { title, items }= docSnapshot.data();
+      acc[title.toLowerCase()] = items;
+      return acc;
+
+    }, {});
+
+    return categoryMap;
+
+  };
+
 
   
   export const createUserDocumentFromAuth = async (
